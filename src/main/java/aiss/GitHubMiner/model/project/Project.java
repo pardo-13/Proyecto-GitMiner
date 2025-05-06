@@ -1,88 +1,59 @@
-
 package aiss.GitHubMiner.model.project;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import aiss.GitHubMiner.model.issue.Issue;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-import com.fasterxml.jackson.annotation.*;
+import java.util.ArrayList;
+import java.util.List;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-    "id",
-    "name",
-    "html_url"
-})
 
 public class Project {
-
     @JsonProperty("id")
-    private Integer id;
+    public String id;
+
     @JsonProperty("name")
-    private String name;
-    @JsonProperty("html_url")
-    private String htmlUrl;
-    @JsonIgnore
-    private Map<String, Object> additionalProperties = new LinkedHashMap<String, Object>();
+    public String name;
 
-    @JsonProperty("id")
-    public Integer getId() {
+    @JsonProperty("web_url")
+    public String webUrl;
+
+    @JsonProperty("issues")
+    private List<Issue> issues;
+
+    public Project() {
+        issues = new ArrayList<>();
+    }
+
+    public String getId() {
         return id;
     }
 
-    @JsonProperty("id")
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public Project withId(Integer id) {
-        this.id = id;
-        return this;
-    }
-
-    @JsonProperty("name")
     public String getName() {
         return name;
     }
 
-    @JsonProperty("name")
     public void setName(String name) {
         this.name = name;
     }
 
-    public Project withName(String name) {
-        this.name = name;
-        return this;
+    public String getWebUrl() {
+        return webUrl;
     }
 
-    @JsonProperty("html_url")
-    public String getHtmlUrl() {
-        return htmlUrl;
+    public void setWebUrl(String webUrl) {
+        this.webUrl = webUrl;
     }
 
-    @JsonProperty("html_url")
-    public void setHtmlUrl(String htmlUrl) {
-        this.htmlUrl = htmlUrl;
+    public List<Issue> getIssues() {
+        return issues;
     }
 
-    public Project withHtmlUrl(String htmlUrl) {
-        this.htmlUrl = htmlUrl;
-        return this;
-    }
-
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
-
-    @JsonAnySetter
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
-    }
-
-    public Project withAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
-        return this;
+    public void setIssues(List<Issue> issues) {
+        this.issues = issues;
     }
 
     @Override
@@ -93,18 +64,14 @@ public class Project {
         sb.append('=');
         sb.append(((this.id == null)?"<null>":this.id));
         sb.append(',');
-        sb.append("name");
+        sb.append("commits");
         sb.append('=');
-        sb.append(((this.name == null)?"<null>":this.name));
         sb.append(',');
-        sb.append("htmlUrl");
+        sb.append("issues");
         sb.append('=');
-        sb.append(((this.htmlUrl == null)?"<null>":this.htmlUrl));
+        sb.append(((this.issues == null)?"<null>":this.issues));
         sb.append(',');
-        sb.append("additionalProperties");
-        sb.append('=');
-        sb.append(((this.additionalProperties == null)?"<null>":this.additionalProperties));
-        sb.append(',');
+
         if (sb.charAt((sb.length()- 1)) == ',') {
             sb.setCharAt((sb.length()- 1), ']');
         } else {
@@ -112,5 +79,4 @@ public class Project {
         }
         return sb.toString();
     }
-
 }

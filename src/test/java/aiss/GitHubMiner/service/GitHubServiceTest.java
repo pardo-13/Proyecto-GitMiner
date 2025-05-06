@@ -24,13 +24,14 @@ class GitHubServiceTest {
 
     @Test
     void getIssues() {
-        Issue[] issues = gitHubService.getIssues(owner, repo);
+        Issue[] issues = gitHubService.getIssues(owner, repo,10,1);
         assertNotNull(issues);
         System.out.println("-------------------------------------------------");
         for(Issue issue : issues){
             System.out.println(
-                    "Id:" + issue.getId() + "Title:" + issue.getTitle() + "Description: " + issue.getBody()
+                    "Id:" + issue.getId() + "Title:" + issue.getTitle() + "Description: " + issue.getDescription()
             );
         }
+        System.out.println(issues.length);
     }
 }

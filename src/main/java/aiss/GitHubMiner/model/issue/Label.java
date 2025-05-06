@@ -1,4 +1,3 @@
-
 package aiss.GitHubMiner.model.issue;
 
 import java.util.LinkedHashMap;
@@ -13,19 +12,18 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-    "id",
-    "node_id",
-    "url",
-    "name",
-    "color",
-    "default",
-    "description"
+        "id",
+        "node_id",
+        "url",
+        "name",
+        "color",
+        "default",
+        "description"
 })
-
 public class Label {
 
     @JsonProperty("id")
-    private Integer id;
+    private String id;
     @JsonProperty("node_id")
     private String nodeId;
     @JsonProperty("url")
@@ -42,16 +40,16 @@ public class Label {
     private Map<String, Object> additionalProperties = new LinkedHashMap<String, Object>();
 
     @JsonProperty("id")
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
     @JsonProperty("id")
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public Label withId(Integer id) {
+    public Label withId(String id) {
         this.id = id;
         return this;
     }
