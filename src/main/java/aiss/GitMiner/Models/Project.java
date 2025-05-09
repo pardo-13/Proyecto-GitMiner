@@ -1,10 +1,8 @@
-package Models;
+package aiss.GitMiner.Models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -33,12 +31,12 @@ public class Project {
     @NotEmpty(message = "The URL of the project cannot be empty")
     public String webUrl;
     @JsonProperty("commits")
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "projectId")
     private List<Commit> commits;
 
     @JsonProperty("issues")
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "projectId")
     private List<Issue> issues;
 

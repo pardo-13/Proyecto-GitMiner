@@ -1,11 +1,8 @@
-package Models;
+package aiss.GitMiner.Models;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import jakarta.persistence.*;
 
 /*
@@ -25,8 +22,6 @@ public class User {
     @JsonProperty("username")
     @NotEmpty(message = "The username cannot be empty")
     private String username;
-    @JsonProperty("name")
-    private String name;
     @JsonProperty("avatar_url")
     private String avatarUrl;
     @JsonProperty("web_url")
@@ -48,13 +43,6 @@ public class User {
         this.username = username;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public String getAvatarUrl() {
         return avatarUrl;
@@ -86,7 +74,6 @@ public class User {
         sb.append(',');
         sb.append("name");
         sb.append('=');
-        sb.append(((this.name == null)?"<null>":this.name));
         sb.append(',');
         sb.append("avatarUrl");
         sb.append('=');

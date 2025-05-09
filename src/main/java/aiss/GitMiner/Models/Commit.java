@@ -1,12 +1,10 @@
-package Models;
+package aiss.GitMiner.Models;
 
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import jakarta.persistence.*;
 
 /*
@@ -25,10 +23,11 @@ public class Commit {
     @JsonProperty("id")
     private String id;
     @JsonProperty("title")
+    @Column(length =1000000)
     private String title;
 
     @JsonProperty("message")
-    @Column(columnDefinition="TEXT")
+    @Column(columnDefinition="TEXT", length=100000)
     private String message;
     @JsonProperty("author_name")
     @NotEmpty(message = "Author name cannot be empty.")
