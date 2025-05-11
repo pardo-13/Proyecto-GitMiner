@@ -6,7 +6,6 @@ import aiss.gitminer.repository.*;
 import aiss.gitminer.exceptions.NotFoundException;
 import aiss.gitminer.exceptions.NotFoundExceptionComment;
 import aiss.gitminer.exceptions.NotFoundExceptionCommit;
-import aiss.gitminer.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -27,8 +26,6 @@ public class GitMinerControllers {
     @Autowired
     private IssueRepository issueRepository;
     @Autowired
-    private UserRepository userRepository;
-    @Autowired
     private CommentRepository commentRepository;
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -36,6 +33,15 @@ public class GitMinerControllers {
     public Project createProject(@Valid @RequestBody Project project) {
        return projectRepository.save(new Project(project.getId(), project.getName(), project.getWebUrl(),
                project.getCommits(), project.getIssues()));
+    }
+
+    @GetMapping("/projects/{id}")
+    public Project getProjectById(@PathVariable String id) throws NotFoundException, NotFoundExceptionCommit {
+        Optional<Project> project = projectRepository.findById(id);
+        if (!project.isPresent()) {
+            throw new NotFoundExceptionCommit();
+        }
+        return project.get();
     }
 
     @GetMapping("/commits/{id}")
@@ -50,7 +56,12 @@ public class GitMinerControllers {
     @GetMapping("/commits")
     public List<Commit> getAllCommits(){
         return commitRepository.findAll();
-        }
+    }
+
+    @GetMapping("/projects")
+    public List<Project> getAllProjects(){
+        return projectRepository.findAll();
+    }
 
     @GetMapping("/comments/{id}")
     public Comment getCommentById(@PathVariable String id) throws NotFoundException, NotFoundExceptionComment {
@@ -66,11 +77,6 @@ public class GitMinerControllers {
         return commentRepository.findAll();
     }
 
-    @GetMapping("/issues")
-    public List<Issue> getAllIssues(){
-        return issueRepository.findAll();
-    }
-
     @GetMapping("/issues/{id}")
     public Issue getIssueById(@PathVariable String id) throws NotFoundException, NotFoundExceptionIssue {
         Optional<Issue> issue = issueRepository.findById(id);
@@ -79,5 +85,43 @@ public class GitMinerControllers {
         }
         return issue.get();
     }
+
+    @GetMapping("/issues/{id}/comments")
+    public List<Comment> getIssuesComment(@PathVariable String id) throws NotFoundException, NotFoundExceptionIssue {
+        Optional<Issue> issue = issueRepository.findById(id);
+        if (!issue.isPresent()) {
+            throw new NotFoundExceptionIssue();
+        }
+        return issue.get().getComments();
+    }
+
+    @GetMapping("/issues")
+    public List<Issue> getIssuesByAuthorId(@RequestParam(required = false) Integer authorId, @RequestParam(required = false) String state) throws NotFoundException {
+        List<Issue> issues = new ArrayList<>();
+        if (authorId!=null && state!=null){
+            for (Issue issue1 : issueRepository.findAll()){
+                if(Integer.parseInt(issue1.getAuthor().getId())==authorId && issue1.getState().equals(state)){
+                    issues.add(issue1);
+                }
+            }
+        } else if (authorId!=null) {
+            for (Issue issue1 : issueRepository.findAll()){
+                if(Integer.parseInt(issue1.getAuthor().getId())==authorId){
+                    issues.add(issue1);
+                }
+            }
+        } else if (state!=null) {
+            for (Issue issue1 : issueRepository.findAll()){
+                if(issue1.getState().equals(state)){
+                    issues.add(issue1);
+                }
+            }
+        } else {
+            issues = issueRepository.findAll();
+        }
+        return issues;
+    }
+
+
 
 }
