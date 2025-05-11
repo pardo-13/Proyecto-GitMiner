@@ -2,12 +2,16 @@ package aiss.GitMiner.Controllers;
 
 import aiss.GitMiner.Models.*;
 import aiss.GitMiner.Repository.*;
+import aiss.GitMiner.Exceptions.NotFoundException;
+import aiss.GitMiner.Exceptions.NotFoundExceptionComment;
+import aiss.GitMiner.Exceptions.NotFoundExceptionCommit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("gitminer/projects")
@@ -58,6 +62,34 @@ public class GitMinerControllers {
         newProject.setIssues(issues);
         newProject.setWebUrl(project.getWebUrl());
         return newProject;
+    }
+
+    @GetMapping("/{id}")
+    public Commit getCommitById(@PathVariable int id) throws NotFoundException, NotFoundExceptionCommit {
+        Optional<Commit> commit = commitRepository.findById(id);
+        if (!commit.isPresent()) {
+            throw new NotFoundExceptionCommit();
+        }
+        return commit.get();
+    }
+
+    @GetMapping
+    public List<Commit> getAllCommits(){
+        return commitRepository.findAll();
+        }
+
+    @GetMapping("/{id}")
+    public Comment getCommentById(@PathVariable int id) throws NotFoundException, NotFoundExceptionComment {
+        Optional<Comment> comment = commentRepository.findById(id);
+        if (!comment.isPresent()) {
+            throw new NotFoundExceptionComment();
+        }
+        return comment.get();
+    }
+
+    @GetMapping
+    public List<Comment> getAllComments(){
+        return commentRepository.findAll();
     }
 
 
