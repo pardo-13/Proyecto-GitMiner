@@ -42,20 +42,39 @@ public class Issue {
     @ElementCollection
     private List<String> labels;
     @JsonProperty("author")
-    @NotNull(message = "The author of the issue cannot be null")
+    //@NotEmpty(message = "The author of the issue cannot be empty")
     @JoinColumn(name = "author_id",referencedColumnName = "id")
-    @OneToOne(cascade=CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(cascade=CascadeType.ALL)
     private User author;
     @JsonProperty("assignee")
     @JoinColumn(name = "assignee_id",referencedColumnName = "id")
-    @OneToOne(cascade=CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(cascade=CascadeType.ALL)
     private User assignee;
     @JsonProperty("votes")
     private Integer votes;
     @JsonProperty("comments")
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "issueId")
     private List<Comment> comments;
+
+
+    public Issue() {}
+
+    public Issue(String id, String title, String description, String state, String createdAt, String updatedAt,
+                 String closedAt, List<String> labels, User author, User assignee, Integer votes, List<Comment> comments) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.state = state;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.closedAt = closedAt;
+        this.labels = labels;
+        this.author = author;
+        this.assignee = assignee;
+        this.votes = votes;
+        this.comments = comments;
+    }
 
     public String getId() {
         return id;
