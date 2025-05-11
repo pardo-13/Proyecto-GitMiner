@@ -42,8 +42,8 @@ public class GitMinerControllers {
         }
         for(Issue issue : project.getIssues()) {
             List<Comment> comments = new ArrayList<>();
-            Optional<User> OpAuthor = userRepository.findById(Integer.parseInt(issue.getAuthor().getId()));
-            Optional<User> OpAssignee = userRepository.findById(Integer.parseInt(issue.getAssignee().getId()));
+            Optional<User> OpAuthor = userRepository.findById(issue.getAuthor().getId());
+            Optional<User> OpAssignee = userRepository.findById(issue.getAssignee().getId());
             User assignee = null;
             User author = null;
             if(OpAuthor.isPresent()){
@@ -59,7 +59,7 @@ public class GitMinerControllers {
 
             if(issue.getComments().size() > 0) {
                 for (Comment comment : issue.getComments()) {
-                    Optional<User> OpComment = userRepository.findById(Integer.parseInt(comment.getAuthor().getId()));
+                    Optional<User> OpComment = userRepository.findById(comment.getAuthor().getId());
                     User commentAuthor = null;
                     if(OpComment.isPresent()){
                         commentAuthor = OpComment.get();
@@ -89,7 +89,7 @@ public class GitMinerControllers {
     }
 
     @GetMapping("/{id}")
-    public Commit getCommitById(@PathVariable int id) throws NotFoundException, NotFoundExceptionCommit {
+    public Commit getCommitById(@PathVariable String id) throws NotFoundException, NotFoundExceptionCommit {
         Optional<Commit> commit = commitRepository.findById(id);
         if (!commit.isPresent()) {
             throw new NotFoundExceptionCommit();
@@ -97,13 +97,13 @@ public class GitMinerControllers {
         return commit.get();
     }
 
-    @GetMapping
+    @GetMapping("/commit")
     public List<Commit> getAllCommits(){
         return commitRepository.findAll();
         }
 
     @GetMapping("comment/{id}")
-    public Comment getCommentById(@PathVariable int id) throws NotFoundException, NotFoundExceptionComment {
+    public Comment getCommentById(@PathVariable String id) throws NotFoundException, NotFoundExceptionComment {
         Optional<Comment> comment = commentRepository.findById(id);
         if (!comment.isPresent()) {
             throw new NotFoundExceptionComment();
@@ -122,7 +122,7 @@ public class GitMinerControllers {
     }
 
     @GetMapping("/issue/{id}")
-    public Issue getIssueById(@PathVariable int id) throws NotFoundException, NotFoundExceptionIssue {
+    public Issue getIssueById(@PathVariable String id) throws NotFoundException, NotFoundExceptionIssue {
         Optional<Issue> issue = issueRepository.findById(id);
         if (!issue.isPresent()) {
             throw new NotFoundExceptionIssue();
