@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("gitminer/projects")
+@RequestMapping("gitminer/")
 public class GitMinerControllers {
 
     @Autowired
