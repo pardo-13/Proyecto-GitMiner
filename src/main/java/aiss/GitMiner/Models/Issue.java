@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
@@ -41,7 +42,7 @@ public class Issue {
     @ElementCollection
     private List<String> labels;
     @JsonProperty("author")
-    @NotEmpty(message = "The author of the issue cannot be empty")
+    @NotNull(message = "The author of the issue cannot be null")
     @JoinColumn(name = "author_id",referencedColumnName = "id")
     @OneToOne(cascade=CascadeType.ALL, orphanRemoval = true)
     private User author;
