@@ -1,5 +1,6 @@
 package aiss.GitMiner.Controllers;
 
+import aiss.GitMiner.Exceptions.NotFoundExceptionIssue;
 import aiss.GitMiner.Models.*;
 import aiss.GitMiner.Repository.*;
 import aiss.GitMiner.Exceptions.NotFoundException;
@@ -32,26 +33,49 @@ public class GitMinerControllers {
     public Project createProject(@RequestBody Project project) {
         List<Commit> commits = new ArrayList<>();
         List<Issue> issues = new ArrayList<>();
+
         for (Commit commit : project.getCommits()) {
-            Commit newCommit = commitRepository.save(commit);
-            commits.add(newCommit);
+            if(commit != null){
+                Commit newCommit = commitRepository.save(commit);
+                commits.add(newCommit);
+            }
         }
         for(Issue issue : project.getIssues()) {
             List<Comment> comments = new ArrayList<>();
-            User assignee = userRepository.save(issue.getAssignee());
-            User author = userRepository.save(issue.getAuthor());
+            Optional<User> OpAuthor = userRepository.findById(Integer.parseInt(issue.getAuthor().getId()));
+            Optional<User> OpAssignee = userRepository.findById(Integer.parseInt(issue.getAssignee().getId()));
+            User assignee = null;
+            User author = null;
+            if(OpAuthor.isPresent()){
+                author = OpAuthor.get();
+            }else{
+                author = userRepository.save(issue.getAuthor());
+            }
+            if(OpAssignee.isPresent()){
+                assignee = OpAssignee.get();
+            }else{
+                assignee = userRepository.save(issue.getAssignee());
+            }
+
             if(issue.getComments().size() > 0) {
                 for (Comment comment : issue.getComments()) {
-                    User commentAuthor = userRepository.save(comment.getAuthor());
+                    Optional<User> OpComment = userRepository.findById(Integer.parseInt(comment.getAuthor().getId()));
+                    User commentAuthor = null;
+                    if(OpComment.isPresent()){
+                        commentAuthor = OpComment.get();
+                    }else{
+                        commentAuthor = userRepository.save(comment.getAuthor());
+                    }
+                    comment.setAuthor(commentAuthor);
                     Comment newComment = commentRepository.save(comment);
-                    newComment.setAuthor(commentAuthor);
                     comments.add(newComment);
                 }
             }
+
+            issue.setAssignee(assignee);
+            issue.setAuthor(author);
+            issue.setComments(comments);
             Issue newIssue = issueRepository.save(issue);
-            newIssue.setAssignee(assignee);
-            newIssue.setAuthor(author);
-            newIssue.setComments(comments);
             issues.add(newIssue);
         }
 
@@ -78,7 +102,7 @@ public class GitMinerControllers {
         return commitRepository.findAll();
         }
 
-    @GetMapping("/{id}")
+    @GetMapping("comment/{id}")
     public Comment getCommentById(@PathVariable int id) throws NotFoundException, NotFoundExceptionComment {
         Optional<Comment> comment = commentRepository.findById(id);
         if (!comment.isPresent()) {
@@ -87,10 +111,23 @@ public class GitMinerControllers {
         return comment.get();
     }
 
-    @GetMapping
+    @GetMapping("/comment")
     public List<Comment> getAllComments(){
         return commentRepository.findAll();
     }
 
+    @GetMapping("/issue")
+    public List<Issue> getAllIssues(){
+        return issueRepository.findAll();
+    }
+
+    @GetMapping("/issue/{id}")
+    public Issue getIssueById(@PathVariable int id) throws NotFoundException, NotFoundExceptionIssue {
+        Optional<Issue> issue = issueRepository.findById(id);
+        if (!issue.isPresent()) {
+            throw new NotFoundExceptionIssue();
+        }
+        return issue.get();
+    }
 
 }

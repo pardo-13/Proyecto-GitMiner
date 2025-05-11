@@ -42,12 +42,12 @@ public class Issue {
     @ElementCollection
     private List<String> labels;
     @JsonProperty("author")
-    //@NotEmpty(message = "The author of the issue cannot be empty")
-    @JoinColumn(name = "author_id",referencedColumnName = "id")
+    @NotNull(message = "The author of the issue cannot be null")
+    @JoinColumn(name = "author_id",referencedColumnName = "id", unique = false)
     @OneToOne(cascade=CascadeType.ALL)
     private User author;
     @JsonProperty("assignee")
-    @JoinColumn(name = "assignee_id",referencedColumnName = "id")
+    @JoinColumn(name = "assignee_id",referencedColumnName = "id", unique = false)
     @OneToOne(cascade=CascadeType.ALL)
     private User assignee;
     @JsonProperty("votes")
@@ -56,25 +56,6 @@ public class Issue {
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "issueId")
     private List<Comment> comments;
-
-
-    public Issue() {}
-
-    public Issue(String id, String title, String description, String state, String createdAt, String updatedAt,
-                 String closedAt, List<String> labels, User author, User assignee, Integer votes, List<Comment> comments) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.state = state;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.closedAt = closedAt;
-        this.labels = labels;
-        this.author = author;
-        this.assignee = assignee;
-        this.votes = votes;
-        this.comments = comments;
-    }
 
     public String getId() {
         return id;
