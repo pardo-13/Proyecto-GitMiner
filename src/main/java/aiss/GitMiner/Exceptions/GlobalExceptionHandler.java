@@ -1,4 +1,4 @@
-package aiss.GitMiner.Exceptions;
+package aiss.gitminer.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

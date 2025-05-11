@@ -1,6 +1,6 @@
-package aiss.GitMiner.Repository;
+package aiss.gitminer.repository;
 
-import aiss.GitMiner.Models.Project;
+import aiss.gitminer.model.Project;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

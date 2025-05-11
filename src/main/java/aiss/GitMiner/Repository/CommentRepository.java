@@ -1,6 +1,6 @@
-package aiss.GitMiner.Repository;
+package aiss.gitminer.repository;
 
-import aiss.GitMiner.Models.Comment;
+import aiss.gitminer.model.Comment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
