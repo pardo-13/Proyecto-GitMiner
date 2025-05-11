@@ -43,17 +43,17 @@ public class Issue {
     private List<String> labels;
     @JsonProperty("author")
     @NotNull(message = "The author of the issue cannot be null")
-    @JoinColumn(name = "author_id",referencedColumnName = "id")
-    @OneToOne(cascade=CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "author_id",referencedColumnName = "id", unique = false)
+    @OneToOne(cascade=CascadeType.ALL)
     private User author;
     @JsonProperty("assignee")
-    @JoinColumn(name = "assignee_id",referencedColumnName = "id")
-    @OneToOne(cascade=CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "assignee_id",referencedColumnName = "id", unique = false)
+    @OneToOne(cascade=CascadeType.ALL)
     private User assignee;
     @JsonProperty("votes")
     private Integer votes;
     @JsonProperty("comments")
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "issueId")
     private List<Comment> comments;
 
